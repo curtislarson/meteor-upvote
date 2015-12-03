@@ -1,0 +1,139 @@
+<body>
+</body>
+
+<template name="mainLayout">
+  {{> navbar}}
+  <div class="container">
+    {{> yield}}
+  </div>
+</template>
+
+<template name="index">
+  {{#each posts}}
+    {{> postRow post=this showContent=false}}
+  {{else}}
+    <label>There are no posts here!</label>
+  {{/each}}
+</template>
+
+<template name="postRow">
+  {{#with post}}
+  <div class="row">
+    <div class="col-md-1 center-text">
+      <div class="row">
+        <i class="fa fa-arrow-up upvote-post"></i>
+      </div>
+      <div class="row">
+        {{numDifference}}
+      </div>
+      <div class="row">
+        <i class="fa fa-arrow-down downvote-post"></i>
+      </div>
+    </div>
+    <div class="col-md-11">
+      <div class="row">
+        <a href="/post/{{_id}}"><h4>{{title}}</h4></a>
+      </div>
+      {{#if ../showContent}}
+      <div class="row">
+        {{content}}
+      </div>
+      {{else}}
+      <div class="row">
+        <a href="/post/{{_id}}"><label>Read Comments</label></a>
+      </div>
+      {{/if}}
+    </div>
+  </div>
+  {{/with}}
+</template>
+
+<template name="post">
+  {{> postRow post=post showContent=true}}
+  {{#if currentUser}}
+  {{> newComment post._id}}
+  {{/if}}
+  <div class="row">
+    <div class="col-md-12">
+      <h4>Comments</h4>
+    </div>
+  </div>
+  {{#each comments}}
+      {{> commentRow this}}
+  {{else}}
+      <label>There are no comments!</label>
+  {{/each}}
+</template>
+
+<template name="commentRow">
+  <div class="row">
+    <div class="col-md-1 center-text">
+      <div class="row">
+        <i class="fa fa-arrow-up upvote-comment"></i>
+      </div>
+      <div class="row">
+        {{numDifference}}
+      </div>
+      <div class="row">
+        <i class="fa fa-arrow-down downvote-comment"></i>
+      </div>
+    </div>
+    <div class="col-md-11">
+      <div class="row">
+        <label>{{owner}}</label>
+      </div>
+      <div class="row">
+        <h5>{{content}}</h5>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="newPost">
+  <form class="new-post">
+    <div class="row">
+      <div class="form-group">
+        <div class="col-md-6">
+          <input type="text" class="form-control" name="title" placeholder="Title"/>
+        </div>
+      </div>
+    </div>
+    <br/>
+    <div class="row">
+      <div class="form-group">
+        <div class="col-md-6">
+          <textarea class="form-control" name="content" placeholder="Content" rows="5"></textarea>
+        </div>
+      </div>
+    </div>
+    <br/>
+    <div class="row">
+      <div class="form-group">
+        <div class="col-md-3">
+          <button type="submit" class="btn btn-default add-post">Submit</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</template>
+
+<template name="newComment">
+  <form class="new-comment">
+    <div class="row">
+      <div class="form-group">
+        <div class="col-md-6">
+          <label>Commenting as Curtis</label>
+          <textarea class="form-control" name="content" placeholder="Post Content" rows="5"></textarea>
+        </div>
+      </div>
+    </div>
+    <br/>
+    <div class="row">
+      <div class="form-group">
+        <div class="col-md-3">
+          <button type="submit" class="btn btn-default add-comment">Submit</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</template>
